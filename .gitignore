@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# 运行时数据库（Skill JSON 归档在 data/ 下，需纳入 git，勿忽略目录）
+*.db
+*.sqlite3
