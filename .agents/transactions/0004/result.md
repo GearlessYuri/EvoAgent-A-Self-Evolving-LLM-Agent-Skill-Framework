@@ -86,4 +86,4 @@ grep -rn "api_key\|API_KEY\|sk-" evoagent/config.py evoagent/llm.py
 ## 7. 提交
 
 - 提交信息：`0004: 落地 OpenAI 兼容 LLM 薄封装 llm.py`
-- 提交哈希：`（提交后回填）`
+- 提交哈希：`e6a8b543109a798338b09d517a6721502319ee66`（`git rev-parse HEAD`，短哈希 `e6a8b54`）
