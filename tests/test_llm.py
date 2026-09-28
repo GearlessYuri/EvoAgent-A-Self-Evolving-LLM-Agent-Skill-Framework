@@ -10,14 +10,15 @@ from evoagent import config
 from evoagent.llm import LLMClient
 
 
-def _fake_client(response_text):
-    """构造一个记录调用参数的 OpenAI 兼容 fake client。"""
+def _fake_client(response_text, usage=None):
+    """构造一个记录调用参数的 OpenAI 兼容 fake client（可指定 resp.usage）。"""
     calls = []
 
     def create(model=None, messages=None, **kwargs):
         calls.append({"model": model, "messages": messages})
         return SimpleNamespace(
-            choices=[SimpleNamespace(message=SimpleNamespace(content=response_text))]
+            choices=[SimpleNamespace(message=SimpleNamespace(content=response_text))],
+            usage=usage,
         )
 
     client = SimpleNamespace(
@@ -72,3 +73,29 @@ def test_injection_does_not_import_openai(monkeypatch):
     monkeypatch.setattr(builtins, "__import__", guarded_import)
     client, _ = _fake_client("hi")
     assert LLMClient(client=client).complete("hi") == "hi"
+
+
+def test_complete_with_usage_returns_three_keys():
+    client, _ = _fake_client("hi", usage=SimpleNamespace(total_tokens=42))
+    llm = LLMClient(client=client)
+    content, usage = llm.complete_with_usage("hello")
+    assert content == "hi"
+    assert set(usage.keys()) == {"total_tokens", "total_cost", "total_latency_ms"}
+    assert usage["total_tokens"] == 42
+    assert usage["total_cost"] == 0.0
+    assert isinstance(usage["total_latency_ms"], int)
+    assert usage["total_latency_ms"] >= 0
+
+
+def test_complete_with_usage_missing_usage_records_zero_tokens():
+    client, _ = _fake_client("hi")  # usage=None
+    llm = LLMClient(client=client)
+    _, usage = llm.complete_with_usage("hello")
+    assert usage["total_tokens"] == 0
+
+
+def test_complete_matches_complete_with_usage_content():
+    client, _ = _fake_client("hi", usage=SimpleNamespace(total_tokens=7))
+    llm = LLMClient(client=client)
+    assert isinstance(llm.complete("hello"), str)
+    assert llm.complete("hello") == llm.complete_with_usage("hello")[0]

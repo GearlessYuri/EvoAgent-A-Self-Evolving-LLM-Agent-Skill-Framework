@@ -5,6 +5,7 @@
 """
 
 import os
+import time
 
 from . import config
 
@@ -27,10 +28,27 @@ class LLMClient:
         self._client = openai.OpenAI(base_url=config.LLM_BASE_URL, api_key=api_key)
         return self._client
 
-    def complete(self, prompt: str) -> str:
+    def complete_with_usage(self, prompt: str) -> tuple[str, dict]:
+        """返回 (content, usage)。usage 为 §6 三键：total_tokens / total_cost / total_latency_ms。"""
+        start = time.monotonic()
         resp = self._get_client().chat.completions.create(
             model=config.LLM_MODEL,
             messages=[{"role": "user", "content": prompt}],
         )
+        latency_ms = int((time.monotonic() - start) * 1000)
+
         content = resp.choices[0].message.content
-        return content if content is not None else ""
+        content = content if content is not None else ""
+
+        usage = getattr(resp, "usage", None)
+        total_tokens = getattr(usage, "total_tokens", 0) if usage is not None else 0
+
+        return content, {
+            "total_tokens": total_tokens,
+            "total_cost": 0.0,          # 定价未实现，占位（见 §11.10）
+            "total_latency_ms": latency_ms,
+        }
+
+    def complete(self, prompt: str) -> str:
+        content, _ = self.complete_with_usage(prompt)
+        return content
