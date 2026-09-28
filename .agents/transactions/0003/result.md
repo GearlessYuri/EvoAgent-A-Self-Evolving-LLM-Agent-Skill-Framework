@@ -90,4 +90,4 @@ grep -rn "import sqlite3" evoagent/
 ## 7. 提交
 
 - 提交信息：`0003: 回补 Task 数据契约并落地 SkillRetriever 简单版检索`
-- 提交哈希：`（提交后回填）`
+- 提交哈希：`0c2d5919671a07cfc79c174274c6144dfaabaf62`（`git rev-parse HEAD`，短哈希 `0c2d591`）
