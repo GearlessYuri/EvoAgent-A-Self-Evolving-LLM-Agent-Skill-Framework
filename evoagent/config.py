@@ -1,7 +1,8 @@
-"""集中配置：路径常量与纯数值阈值 / 权重。
+"""集中配置：路径常量、纯数值阈值 / 权重与 OpenAI 兼容路径的 LLM 常量。
 
-本模块只承载已由系统设计钉死的纯数值常量与路径，不含任何 LLM provider /
-model / API key 等参数（这些随 `llm.py` / evaluator 事务引入）。
+纯数值阈值 / 权重与路径已由系统设计钉死。LLM 常量（`LLM_BASE_URL` /
+`LLM_MODEL` / `LLM_API_KEY_ENV`）提供 OpenAI 兼容 provider 的可覆盖默认值；
+API key 仅通过环境变量在运行时读取、绝不以明文进入仓库。
 """
 
 # ── 路径 ────────────────────────────────────────────────────────────────
@@ -20,3 +21,8 @@ SQLITE_WAL_ENABLED = True           # §12/§14 单进程单写者，SQLite 开 
 # ── 存储门面（事务 0002 追加） ───────────────────────────────────────────
 SKILLS_DIR = "data/skills"        # §5/§13 Skill 内容 JSON 归档根目录
 TRACE_CONTENT_MAX_CHARS = 4000    # §6 trace_steps.content 截断阈值
+
+# ── LLM（事务 0004 引入，OpenAI 兼容路径） ────────────────────────────────
+LLM_BASE_URL = "https://api.deepseek.com"   # OpenAI 兼容 provider base_url（可覆盖）
+LLM_MODEL = "deepseek-chat"                 # 默认模型
+LLM_API_KEY_ENV = "DEEPSEEK_API_KEY"        # 环境变量名；key 值绝不进仓库，仅运行时读取
