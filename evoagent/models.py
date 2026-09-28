@@ -1,6 +1,7 @@
 """数据契约：全部 dataclass 数据结构 + 递归序列化辅助。
 
-本模块定义系统设计 §5–§11 的 8 个 dataclass，是跨层传递的「合同」。
+本模块定义 9 个 dataclass：`Task`（§4 回补，设计文档尚未补字段定义）+
+系统设计 §5–§11 的 8 个，是跨层传递的「合同」。
 每个 dataclass 通过 `_Serializable` 基类获得 `to_dict()` / `from_dict()`
 双向递归序列化能力（嵌套 dataclass 递归重建、`None` 与空集区分、
 `bool | None` 三态精确保留）。
@@ -72,6 +73,15 @@ class _Serializable:
     @classmethod
     def from_dict(cls, d: dict):
         return _from_dict(cls, d)
+
+
+# ── §4 Task 数据结构（设计缺口回补） ─────────────────────────────────────
+
+
+@dataclasses.dataclass
+class Task(_Serializable):
+    task: str          # 任务描述（文本，供检索与执行）
+    task_source: str   # "real"（真实任务）| "benchmark"（跑分）——§4 防污染标签
 
 
 # ── §5 Skill 数据结构 ───────────────────────────────────────────────────

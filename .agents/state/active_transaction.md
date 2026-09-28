@@ -5,9 +5,9 @@
 
 ---
 
-事务 ID：`0002`
+事务 ID：`0003`
 
-目标：落地存储领域门面层（`SkillRegistry` / `TraceStore` / `EvalStore`），闭合 JSON 反序列化与 4000 字符截断两处后置逻辑，并配套单元测试。
+目标：回补 `Task` dataclass 设计缺口，并落地执行层第一步 `SkillRetriever`（简单版：关键词 / 余弦相似度 + tag 过滤 + 无匹配兜底），配套单元测试。
 
 状态：已关闭
 
@@ -16,11 +16,11 @@
 开始时间：2026-09-28
 
 相关文件：
-- `.agents/transactions/0002/context.md`
-- `.agents/transactions/0002/plan.md`
-- `.agents/transactions/0002/review.md`
-- `.agents/transactions/0002/task.md`
-- `.agents/transactions/0002/execution.md`
-- `.agents/transactions/0002/result.md`
+- `.agents/transactions/0003/context.md`
+- `.agents/transactions/0003/plan.md`
+- `.agents/transactions/0003/review.md`
+- `.agents/transactions/0003/task.md`
+- `.agents/transactions/0003/execution.md`
+- `.agents/transactions/0003/result.md`
 
-备注：本事务已实现并验证通过（全量 52 项测试 PASSED，含 0001 既有 26 项无回归）。承接已关闭的 `0001` 底座层，落地设计 §2 存储层（§3.1–§3.3）三个领域门面，只调 `storage.py`；不含 `llm.py`、执行/评估/演化/编排层、`Task` dataclass 回补及任何 git 提交。
+备注：本事务已实现并验证通过（全量 63 项测试 PASSED，含既有 52 项无回归），并按 §10 授权完成一次本地提交。承接已关闭的 `0001`/`0002`，在 `models.py` 追加 `Task` dataclass（闭合设计缺口）并实现 `skills/retriever.py`；不含 `llm.py`、`AgentExecutor`、embedding 进阶版、种子技能写库。

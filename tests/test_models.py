@@ -11,6 +11,7 @@ from evoagent.models import (
     Experience,
     FewShot,
     Skill,
+    Task,
     ToolSpec,
     TraceStep,
 )
@@ -24,17 +25,26 @@ ALL_DATACLASSES = [
     EvaluationResult,
     Experience,
     BenchmarkTask,
+    Task,
 ]
 
 
-def test_eight_dataclasses_defined():
-    """验收标准 2：恰好 8 个 dataclass，且均为 dataclass。"""
-    assert len(ALL_DATACLASSES) == 8
+def test_all_dataclasses_defined():
+    """验收标准 2：恰好 9 个 dataclass，且均为 dataclass。"""
+    assert len(ALL_DATACLASSES) == 9
     for cls in ALL_DATACLASSES:
         assert dataclasses.is_dataclass(cls), cls.__name__
 
 
 # ── 每个 dataclass 的 round-trip 用例 ────────────────────────────────────
+
+
+def test_task_roundtrip():
+    obj = Task(task="请审查以下代码", task_source="real")
+    restored = Task.from_dict(obj.to_dict())
+    assert restored == obj
+    assert restored.task == "请审查以下代码"
+    assert restored.task_source == "real"
 
 
 def test_fewshot_roundtrip():
