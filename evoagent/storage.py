@@ -20,6 +20,9 @@ _SCHEMA = """
 CREATE TABLE IF NOT EXISTS skills (
     skill_id       TEXT NOT NULL,
     version        TEXT NOT NULL,
+    name           TEXT NOT NULL DEFAULT '',
+    description    TEXT NOT NULL DEFAULT '',
+    tags           TEXT NOT NULL DEFAULT '[]',
     status         TEXT NOT NULL,
     parent_version TEXT NOT NULL DEFAULT '',
     change_log     TEXT NOT NULL DEFAULT '',

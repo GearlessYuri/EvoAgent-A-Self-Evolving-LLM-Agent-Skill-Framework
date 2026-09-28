@@ -58,7 +58,7 @@ def test_skills_columns(tmp_path):
     storage.connect()
     storage.init_schema()
     cols = _columns(storage.conn, "skills")
-    for name in ["skill_id", "version", "status"]:
+    for name in ["skill_id", "version", "status", "name", "description", "tags"]:
         assert name in cols
 
 

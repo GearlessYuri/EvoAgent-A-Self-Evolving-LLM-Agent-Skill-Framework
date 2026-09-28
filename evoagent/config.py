@@ -16,3 +16,7 @@ PASS_THRESHOLD = 0.6                # §7 `passed` 判定阈值
 
 # ── WAL 开关 ───────────────────────────────────────────────────────────
 SQLITE_WAL_ENABLED = True           # §12/§14 单进程单写者，SQLite 开 WAL
+
+# ── 存储门面（事务 0002 追加） ───────────────────────────────────────────
+SKILLS_DIR = "data/skills"        # §5/§13 Skill 内容 JSON 归档根目录
+TRACE_CONTENT_MAX_CHARS = 4000    # §6 trace_steps.content 截断阈值
