@@ -5,6 +5,8 @@
 
 from __future__ import annotations
 
+import subprocess
+import sys
 import uuid
 from datetime import datetime, timezone
 
@@ -25,6 +27,23 @@ def _judge_prompt(task_text: str, final_output: str, rubric_dims: list[str], ref
         f"评分维度：{dims}{ref}\n"
         f"请对每个维度打 0~5 分，并以 JSON 输出 {{'rubric_scores': {{维度: 分数}}, 'reason': '理由'}}。"
     )
+
+
+def _run_test_script(script: str, output: str) -> tuple[bool, str]:
+    """子进程隔离执行判题脚本：脚本从 stdin 读 `output`（final_output），exit 0 为通过。"""
+    try:
+        proc = subprocess.run(
+            [sys.executable, "-c", script],
+            input=output,
+            text=True,
+            capture_output=True,
+            timeout=config.TEST_SCRIPT_TIMEOUT_SEC,
+        )
+        return proc.returncode == 0, f"exit_code={proc.returncode}"
+    except subprocess.TimeoutExpired:
+        return False, "timeout"
+    except Exception as exc:  # OSError 等一律捕获，绝不逃逸到 evaluate 外
+        return False, str(exc)
 
 
 class Evaluator:
@@ -72,8 +91,8 @@ class Evaluator:
             return _result("objective", False, 0.0, {"status": status}, 0.0, {}, "")
 
         otype = objective_check.get("type") if objective_check else None
-        if otype not in ("exact", "contains"):
-            otype = None  # 未知 type（含 test_script）视为「无客观」，延后到 0007
+        if otype not in ("exact", "contains", "test_script"):
+            otype = None  # 未知 type 视为「无客观」，走 judge 分支
 
         # 分支 2：exact → 客观定论（跳过 judge）
         if otype == "exact":
@@ -82,6 +101,19 @@ class Evaluator:
                 "objective", matched, 1.0 if matched else 0.0,
                 {"status": status, "type": "exact", "matched": matched}, 0.0, {}, "",
             )
+
+        # 分支 2.5：test_script → 客观定论（跳过 judge），子进程执行
+        if otype == "test_script":
+            value = objective_check.get("value")
+            if not (isinstance(value, str) and value.strip()):
+                otype = None  # value 非字符串/空 → 视为「无客观」，走 judge 分支
+            else:
+                test_pass, _ = _run_test_script(value, final_output)
+                return _result(
+                    "objective", test_pass, 1.0 if test_pass else 0.0,
+                    {"status": status, "type": "test_script", "test_pass": test_pass},
+                    0.0, {}, "",
+                )
 
         # 分支 3：contains 半信号 + rubric → mixed（0.7*obj + 0.3*judge）
         if otype == "contains" and rubric:

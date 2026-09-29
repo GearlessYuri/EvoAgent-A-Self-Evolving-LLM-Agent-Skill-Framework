@@ -159,9 +159,9 @@ def test_unknown_objective_type_goes_to_judge(tmp_path):
     result = evaluator.evaluate(
         _make_trace(final_output="out"),
         Task(task="x", task_source="real"),
-        objective_check={"type": "test_script", "value": "..."},
+        objective_check={"type": "unknown_type", "value": "..."},
     )
-    # test_script 未知 type → 视作无客观 → judge_generic（无 rubric），不崩溃
+    # 未知 type → 视作无客观 → judge_generic（无 rubric），不崩溃
     assert result.eval_basis == "judge_generic"
     assert result.passed is None
     assert len(judge.calls) == 1
@@ -187,3 +187,81 @@ def test_evaluate_writes_and_reads_back(tmp_path):
     assert got.objective == result.objective
     assert got.rubric_scores == result.rubric_scores
     assert got.judge_score == result.judge_score
+
+
+def test_test_script_pass(tmp_path):
+    store = _make_eval_store(tmp_path)
+    judge = _FakeJudgeLLM()
+    evaluator = Evaluator(llm=judge, eval_store=store)
+
+    result = evaluator.evaluate(
+        _make_trace(final_output="hello world"),
+        Task(task="x", task_source="real"),
+        objective_check={"type": "test_script",
+                         "value": 'import sys; sys.exit(0 if "hello" in sys.stdin.read() else 1)'},
+    )
+    assert result.eval_basis == "objective"
+    assert result.passed is True
+    assert result.total_score == 1.0
+    assert result.objective["test_pass"] is True
+    assert result.objective["type"] == "test_script"
+    assert judge.calls == []  # test_script 定论跳过 judge
+
+
+def test_test_script_fail_nonzero_exit(tmp_path):
+    store = _make_eval_store(tmp_path)
+    judge = _FakeJudgeLLM()
+    evaluator = Evaluator(llm=judge, eval_store=store)
+
+    result = evaluator.evaluate(
+        _make_trace(final_output="hello"),
+        Task(task="x", task_source="real"),
+        objective_check={"type": "test_script", "value": "import sys; sys.exit(1)"},
+    )
+    assert result.eval_basis == "objective"
+    assert result.passed is False
+    assert result.total_score == 0.0
+    assert result.objective["test_pass"] is False
+
+
+def test_test_script_timeout(tmp_path, monkeypatch):
+    monkeypatch.setattr("evoagent.config.TEST_SCRIPT_TIMEOUT_SEC", 0.2)
+    store = _make_eval_store(tmp_path)
+    judge = _FakeJudgeLLM()
+    evaluator = Evaluator(llm=judge, eval_store=store)
+
+    result = evaluator.evaluate(
+        _make_trace(final_output="hello"),
+        Task(task="x", task_source="real"),
+        objective_check={"type": "test_script", "value": "while True: pass"},
+    )
+    assert result.passed is False
+    assert result.total_score == 0.0
+
+
+def test_test_script_error_does_not_escape(tmp_path):
+    store = _make_eval_store(tmp_path)
+    judge = _FakeJudgeLLM()
+    evaluator = Evaluator(llm=judge, eval_store=store)
+
+    result = evaluator.evaluate(
+        _make_trace(final_output="hello"),
+        Task(task="x", task_source="real"),
+        objective_check={"type": "test_script", "value": "raise RuntimeError('x')"},
+    )
+    assert result.passed is False
+    assert result.total_score == 0.0
+
+
+def test_test_script_non_string_value_goes_to_judge(tmp_path):
+    store = _make_eval_store(tmp_path)
+    judge = _FakeJudgeLLM({"rubric_scores": {"correctness": 3}, "reason": "ok"})
+    evaluator = Evaluator(llm=judge, eval_store=store)
+
+    result = evaluator.evaluate(
+        _make_trace(final_output="hello"),
+        Task(task="x", task_source="real"),
+        objective_check={"type": "test_script", "value": 123},
+    )
+    assert result.eval_basis != "objective"  # 非字符串 value → 走 judge 分支，不崩溃
+    assert len(judge.calls) == 1

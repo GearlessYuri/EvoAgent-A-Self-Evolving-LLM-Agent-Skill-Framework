@@ -26,3 +26,7 @@ TRACE_CONTENT_MAX_CHARS = 4000    # §6 trace_steps.content 截断阈值
 LLM_BASE_URL = "https://api.deepseek.com"   # OpenAI 兼容 provider base_url（可覆盖）
 LLM_MODEL = "deepseek-chat"                 # 默认模型
 LLM_API_KEY_ENV = "DEEPSEEK_API_KEY"        # 环境变量名；key 值绝不进仓库，仅运行时读取
+
+# ── Benchmark / test_script（事务 0007 追加） ──────────────────────────────
+BENCHMARKS_DIR = "data/benchmarks"   # §13 benchmark 任务集目录（regression.json / extension.json）
+TEST_SCRIPT_TIMEOUT_SEC = 5          # §7 test_script 客观判题子进程超时（秒）

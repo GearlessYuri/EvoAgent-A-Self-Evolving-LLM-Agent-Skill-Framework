@@ -5,9 +5,9 @@
 
 ---
 
-事务 ID：`0006`
+事务 ID：`0007`
 
-目标：落地评估层核心 `Evaluator`（客观信号 + LLM-as-judge + 融合 + passed 三态）与 `ExperienceExtractor`（经验提炼），并给 `LLMClient` 新增 `chat_json()` judge 扩展；`Benchmark` 顺延至 `0007`。
+目标：落地 `Benchmark`（任务集加载 + 批量「执行→评估→汇总」+ 报告）与 `test_script` 客观执行（子进程 + 超时），并把 §11 防污染三规则落实为代码可见的隔离机制；`SkillEvolver` 顺延至 `0008`。
 
 状态：已关闭
 
@@ -16,11 +16,11 @@
 开始时间：2026-09-29
 
 相关文件：
-- `.agents/transactions/0006/context.md`
-- `.agents/transactions/0006/plan.md`
-- `.agents/transactions/0006/review.md`
-- `.agents/transactions/0006/task.md`
-- `.agents/transactions/0006/execution.md`
-- `.agents/transactions/0006/result.md`
+- `.agents/transactions/0007/context.md`
+- `.agents/transactions/0007/plan.md`
+- `.agents/transactions/0007/review.md`
+- `.agents/transactions/0007/task.md`
+- `.agents/transactions/0007/execution.md`
+- `.agents/transactions/0007/result.md`
 
-备注：本事务已实现并验证通过（全量 92 项测试 PASSED，含既有 75 项无回归），并按 §10 授权完成一次本地提交。承接已关闭的 `0001`–`0005`，复用 `0004` 预留的 `chat_json` 扩展点，闭合 §7 的「客观可判跳过 judge / 无客观且无 rubric 不判 pass（三态）」信号边界；不含 `Benchmark`/演化层/`test_script` 客观类型及任何真实 LLM 请求。
+备注：本事务已实现并验证通过（全量 104 项测试 PASSED，含既有 92 项无回归），并按 §10 授权完成一次本地提交。承接已关闭的 `0001`–`0006`，补 `Evaluator` 的 `test_script` 客观分支（子进程隔离 + 超时 + 异常兜底），落地 `Benchmark` 作为 `Validator` A/B 的「尺子」；不含 `SkillEvolver`/`Validator`/`EvolutionLoop`/win_rate A/B/真实 LLM 请求。
