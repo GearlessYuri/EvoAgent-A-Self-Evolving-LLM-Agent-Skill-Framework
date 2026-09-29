@@ -85,4 +85,4 @@ grep -rn "import sqlite3" evoagent/
 ## 7. 提交
 
 - 提交信息：`0006: 落地评估层 Evaluator 与 ExperienceExtractor`
-- 提交哈希：`（提交后回填）`
+- 提交哈希：`f0c2311fe779df668f1041c51067ac451661e85c`（`git rev-parse HEAD`，短哈希 `f0c2311`）
