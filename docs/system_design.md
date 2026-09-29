@@ -204,6 +204,13 @@ flowchart TD
 
 ## 4. 数据流设计
 
+```python
+@dataclass
+class Task:
+    task: str          # 任务描述（文本，供检索与执行）
+    task_source: str   # "real"（真实任务）| "benchmark"（跑分）——§4 防污染标签
+```
+
 **正向流（运行时，每次执行都走）**
 1. `Task` 进入 CLI/Loop，打来源标签 `task_source`（`real` = 真实任务 / `benchmark` = 跑分），标签随 Trace 贯穿全链路（防污染的关键，§11）
 2. `SkillRetriever.retrieve(task)` → top-1（默认）active Skill；相似度低于阈值时走 default skill 兜底（§3.2）

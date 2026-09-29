@@ -34,3 +34,6 @@ TEST_SCRIPT_TIMEOUT_SEC = 5          # §7 test_script 客观判题子进程超�
 # ── 演化 promote（事务 0008 追加） ──────────────────────────────────────────
 PROMOTE_WIN_RATE_THRESHOLD = 0.55   # §9/§11 A/B promote 阈值（win_rate 下限，≥ 且 avg 不降才 promote）
 MIN_REGRESSION_TASKS = 20           # §9/§11 regression 集最小题数，不足转人工
+
+# ── 演化触发（事务 0009 追加） ──────────────────────────────────────────────
+MIN_EVOLUTION_SAMPLES = 1   # §9 触发阈值：某 skill 低分样本数 ≥ 此值才演化（v1 简化，见 §11.3）
