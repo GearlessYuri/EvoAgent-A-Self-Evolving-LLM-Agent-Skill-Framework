@@ -98,4 +98,4 @@ python -m venv <tmp>/evoagent-venv --system-site-packages
 ## 7. 提交
 
 - 提交信息：`0009: 收官——落地 EvolutionLoop、CLI 与打包/文档收尾`
-- 提交哈希：`（提交后回填）`
+- 提交哈希：`8fb73d29a237b6eb88064e5e7209ede596650007`（`git rev-parse HEAD`，短哈希 `8fb73d2`）
