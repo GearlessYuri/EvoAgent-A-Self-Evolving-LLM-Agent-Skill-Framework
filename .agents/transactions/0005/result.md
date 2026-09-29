@@ -84,4 +84,4 @@ grep -rn "import sqlite3" evoagent/
 ## 7. 提交
 
 - 提交信息：`0005: 落地执行层 AgentExecutor 与 usage 采集扩展`
-- 提交哈希：`（提交后回填）`
+- 提交哈希：`6a9dc313479bff36719044d916193004d98a8ee1`（`git rev-parse HEAD`，短哈希 `6a9dc31`）
