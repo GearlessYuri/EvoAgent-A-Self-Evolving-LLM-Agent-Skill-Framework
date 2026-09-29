@@ -99,3 +99,39 @@ def test_complete_matches_complete_with_usage_content():
     llm = LLMClient(client=client)
     assert isinstance(llm.complete("hello"), str)
     assert llm.complete("hello") == llm.complete_with_usage("hello")[0]
+
+
+def test_chat_json_parses_plain_json():
+    client, _ = _fake_client('{"rubric_scores": {"correctness": 5}}')
+    llm = LLMClient(client=client)
+    assert llm.chat_json("judge please") == {"rubric_scores": {"correctness": 5}}
+
+
+def test_chat_json_parses_json_with_surrounding_text():
+    client, _ = _fake_client('前言 {"a": 1} 后语')
+    llm = LLMClient(client=client)
+    assert llm.chat_json("judge please") == {"a": 1}
+
+
+def test_chat_json_non_json_raises():
+    client, _ = _fake_client('not json at all')
+    llm = LLMClient(client=client)
+    with pytest.raises(ValueError):
+        llm.chat_json("judge please")
+
+
+def test_chat_json_uses_injected_client(monkeypatch):
+    real_import = builtins.__import__
+
+    def guarded_import(name, *args, **kwargs):
+        if name == "openai":
+            raise AssertionError("注入路径不应 import openai")
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", guarded_import)
+    client, calls = _fake_client('{"a": 1}')
+    llm = LLMClient(client=client)
+    assert llm.chat_json("judge") == {"a": 1}
+    # chat_json 复用 complete：消息应含 prompt 与 JSON 指令
+    assert len(calls) == 1
+    assert "请只输出一个 JSON 对象" in calls[0]["messages"][0]["content"]

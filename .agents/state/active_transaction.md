@@ -5,22 +5,22 @@
 
 ---
 
-事务 ID：`0005`
+事务 ID：`0006`
 
-目标：落地执行层 `AgentExecutor`（v1 单轮、无工具调用）+ `LLMClient` 的 `complete_with_usage()` usage 采集扩展，配套 mock-first 单测。
+目标：落地评估层核心 `Evaluator`（客观信号 + LLM-as-judge + 融合 + passed 三态）与 `ExperienceExtractor`（经验提炼），并给 `LLMClient` 新增 `chat_json()` judge 扩展；`Benchmark` 顺延至 `0007`。
 
 状态：已关闭
 
 当前阶段：已关闭
 
-开始时间：2026-09-28
+开始时间：2026-09-29
 
 相关文件：
-- `.agents/transactions/0005/context.md`
-- `.agents/transactions/0005/plan.md`
-- `.agents/transactions/0005/review.md`
-- `.agents/transactions/0005/task.md`
-- `.agents/transactions/0005/execution.md`
-- `.agents/transactions/0005/result.md`
+- `.agents/transactions/0006/context.md`
+- `.agents/transactions/0006/plan.md`
+- `.agents/transactions/0006/review.md`
+- `.agents/transactions/0006/task.md`
+- `.agents/transactions/0006/execution.md`
+- `.agents/transactions/0006/result.md`
 
-备注：本事务已实现并验证通过（全量 75 项测试 PASSED，含既有 68 项无回归），并按 §10 授权完成一次本地提交。承接已关闭的 `0001`–`0004`，闭合 `0004/result.md` §4 的 usage 扩展点（伴生方法 `complete_with_usage()`，不改 `complete()`），实现执行层 `AgentExecutor` 骨架；不含 `tools.py`/工具调用/多轮 loop/`task` 错误分类/`chat_json`/`Evaluator`。
+备注：本事务已实现并验证通过（全量 92 项测试 PASSED，含既有 75 项无回归），并按 §10 授权完成一次本地提交。承接已关闭的 `0001`–`0005`，复用 `0004` 预留的 `chat_json` 扩展点，闭合 §7 的「客观可判跳过 judge / 无客观且无 rubric 不判 pass（三态）」信号边界；不含 `Benchmark`/演化层/`test_script` 客观类型及任何真实 LLM 请求。
