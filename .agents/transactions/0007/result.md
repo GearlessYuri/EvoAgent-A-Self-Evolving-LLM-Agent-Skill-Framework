@@ -84,4 +84,4 @@ grep -rn "import sqlite3" evoagent/
 ## 7. 提交
 
 - 提交信息：`0007: 落地 Benchmark 与 test_script 客观执行`
-- 提交哈希：`（提交后回填）`
+- 提交哈希：`5a511f5d31c66fc5de0c81ce6445304fbed0efa3`（`git rev-parse HEAD`，短哈希 `5a511f5`）
