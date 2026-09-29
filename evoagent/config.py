@@ -30,3 +30,7 @@ LLM_API_KEY_ENV = "DEEPSEEK_API_KEY"        # 环境变量名；key 值绝不进
 # ── Benchmark / test_script（事务 0007 追加） ──────────────────────────────
 BENCHMARKS_DIR = "data/benchmarks"   # §13 benchmark 任务集目录（regression.json / extension.json）
 TEST_SCRIPT_TIMEOUT_SEC = 5          # §7 test_script 客观判题子进程超时（秒）
+
+# ── 演化 promote（事务 0008 追加） ──────────────────────────────────────────
+PROMOTE_WIN_RATE_THRESHOLD = 0.55   # §9/§11 A/B promote 阈值（win_rate 下限，≥ 且 avg 不降才 promote）
+MIN_REGRESSION_TASKS = 20           # §9/§11 regression 集最小题数，不足转人工

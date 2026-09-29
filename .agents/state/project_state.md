@@ -12,14 +12,14 @@
 
 ## 当前目标（Current Objective）
 
-（待记录——事务 `0007` 的「落地 `Benchmark` + `test_script` 客观执行 + 防污染三规则」目标已完成，下一目标尚未在事务中明确。）
+（待记录——事务 `0008` 的「落地 `SkillEvolver` + `Validator`（A/B promote）」目标已完成，下一目标尚未在事务中明确。）
 
 ## 架构摘要（Architecture Summary）
 
-分层架构（依据 `docs/system_design.md` §2）。**底座层完整**（含 `llm.py`），存储门面层、执行层（检索器 + 执行器）、评估层（Evaluator + ExperienceExtractor + Benchmark）已落地：
+分层架构（依据 `docs/system_design.md` §2）。**底座层完整**（含 `llm.py`），存储门面层、执行层（检索器 + 执行器）、评估层（Evaluator + ExperienceExtractor + Benchmark）、演化层（SkillEvolver + Validator）已落地：
 
 - `evoagent/models.py` —— 数据契约：`Task`（§4 回补）+ 设计 §5–§11 的 8 个 dataclass，共 **9 个**，含递归 `to_dict`/`from_dict` 序列化。
-- `evoagent/config.py` —— 集中常量：路径 + 纯数值阈值/权重 + LLM 常量 + Benchmark/test_script 常量。
+- `evoagent/config.py` —— 集中常量：路径 + 纯数值阈值/权重 + LLM 常量 + Benchmark/test_script 常量 + 演化 promote 常量。
 - `evoagent/llm.py` —— `LLMClient`：OpenAI 兼容 LLM 薄封装（`complete()` + `complete_with_usage()` + `chat_json()`）。
 - `evoagent/storage.py` —— 存储底座：`Storage` 类（连接 + WAL、建 5 表、通用参数化 CRUD），全项目唯一 `import sqlite3`/写 SQL 的模块。
 - `evoagent/skills/registry.py` —— `SkillRegistry`：技能版本 CRUD + 状态机 + active 指针 + 内容 JSON 归档。
@@ -30,8 +30,10 @@
 - `evoagent/eval/evaluator.py` —— `Evaluator`：客观信号（exact/contains/test_script）+ LLM-as-judge 融合 + `passed` 三态。
 - `evoagent/eval/experience.py` —— `ExperienceExtractor`：Trace + Result → `Experience[]`。
 - `evoagent/eval/benchmark.py` —— `Benchmark`：任务集加载 + 批量「执行→评估→汇总」+ `BenchmarkReport`。
+- `evoagent/evolution/evolver.py` —— `SkillEvolver`：`Experience[]` → 候选新版本（draft、patch 递增）。
+- `evoagent/evolution/validator.py` —— `Validator`：Benchmark A/B → win_rate 判定 → promote/丢弃/转人工。
 
-尚未落地：执行层 `tools.py`（工具调用）、演化/编排层（`SkillEvolver`/`Validator`/`EvolutionLoop`）、`cli.py`。
+尚未落地：执行层 `tools.py`（工具调用）、编排层 `EvolutionLoop`、`cli.py`。
 
 ## 已实现的能力（Implemented Capabilities）
 
@@ -40,19 +42,20 @@
 - SQLite 存储底座：WAL 连接、自动建父目录、5 张表 schema、参数化 CRUD。
 - 存储领域门面层：`SkillRegistry`、`TraceStore`、`EvalStore`。
 - 执行层：`SkillRetriever`（检索）、`AgentExecutor`（单轮执行、usage 采集）。
-- 评估层：`Evaluator`（客观 + judge + 融合 + passed 三态）、`ExperienceExtractor`（经验提炼）、`Benchmark`（任务集 + 批量跑分 + 汇总 + 防污染隔离）。
+- 评估层：`Evaluator`、`ExperienceExtractor`、`Benchmark`（防污染隔离）。
+- 演化层：`SkillEvolver`（经验→候选）、`Validator`（A/B win_rate → promote/丢弃/转人工）。
 - LLM 薄封装 `LLMClient`：`complete()` + `complete_with_usage()` + `chat_json()`。
-- 单元测试 104 项全部通过（`tests/` 下 11 个测试文件）。
+- 单元测试 115 项全部通过（`tests/` 下 13 个测试文件）。
 
 ## 当前开发阶段（Current Development Stage）
 
-底座层、存储门面层、执行层、评估层（`Evaluator` + `ExperienceExtractor` + `Benchmark`）已落地并通过 `pytest` 验证（事务 `0001`–`0007` 已关闭）。演化/编排层（`SkillEvolver`/`Validator`/`EvolutionLoop`）与 `tools.py` 尚未开始。
+底座层、存储门面层、执行层、评估层、演化层（`SkillEvolver` + `Validator`）已落地并通过 `pytest` 验证（事务 `0001`–`0008` 已关闭）。编排层 `EvolutionLoop`、`cli.py` 与 `tools.py` 尚未开始。
 
 ## 已知约束（Known Constraints）
 
 - Python 3.10+（本机 3.13.9）。
 - 运行时依赖：标准库 + `openai>=1.0`（OpenAI 兼容 SDK，唯一第三方运行时依赖）；开发期依赖 `pytest`。
-- 分层约束：上层只能调下层（或同层）；`storage.py` 是全项目唯一写 SQL/`import sqlite3` 处，`llm.py` 只依赖 `config`，执行/评估层只调下层接口。
+- 分层约束：上层只能调下层（或同层）；`storage.py` 是全项目唯一写 SQL/`import sqlite3` 处，`llm.py` 只依赖 `config`，各层只调下层接口。
 - 并发模型：单进程单写者（SQLite 开 WAL）。
 - 仓库为 git 仓库（`main` 分支，已初始化）。
 
@@ -65,6 +68,7 @@
 - `Evaluator` 的 `test_script` 仅「崩溃/超时隔离」（子进程 + 超时），非 OS 沙箱——不可信脚本需 OS 级沙箱。
 - `Benchmark.load_tasks` 要求 JSON 含 `reference_answer`（`from_dict` 严格，§4.3「可选」措辞与实际不一致）。
 - `ExperienceExtractor` 的 `_MIN_CONFIDENCE` 硬编码在 `experience.py`（非 `config`）。
+- 演化候选只用 `draft`/`active`/`deprecated` 三态（`candidate` 态不区分，设计遗留）；版本恒 patch 递增（不做 minor/major diff 判定）；A/B 顺序跑（非「同批交错」抵消 judge 漂移）。
 - `docs/system_design.md` 仍缺 `Task` dataclass 字段定义（事务 `0003` 在 `models.py` 代码中补齐，设计文档回补待后续事务）。
 - `pyproject.toml` 的 `packages=["evoagent"]` 不含子包，`pip install .` 不打包门面（待引入 `cli.py`/真实安装时处理）。
 - `metrics` 增量回写未实现（使用次数/成功率由 traces/evals 聚合，属后续报告层）。
@@ -86,12 +90,12 @@
 - 2026-09-28（事务 0004）：底座层 `llm.py` 落地决策——只走 OpenAI 兼容路径；窄接口 `complete()`；引入 `openai>=1.0`。
 - 2026-09-28（事务 0005）：执行层 `AgentExecutor` 落地决策——`complete_with_usage()` 伴生方法；v1 单轮无工具；`run()` 只返回 Trace。
 - 2026-09-29（事务 0006）：评估层 Evaluator + ExperienceExtractor 落地决策——`chat_json()` + 解析兜底；六分支 `eval_basis` + `passed` 三态；judge 同模型；`_MIN_CONFIDENCE` 硬编码。
-- 2026-09-29（事务 0007）：Benchmark + test_script 落地决策——
-  - `test_script` 客观定论：子进程 + 超时（`TEST_SCRIPT_TIMEOUT_SEC=5`），`returncode==0`→pass；`value` 非字符串/空→无客观走 judge。
-  - `Benchmark`：任务集加载 + 批量「执行→评估→汇总」+ `BenchmarkReport`（不进 models.py）。
-  - `success_rate` 口径：`passed is True 数 / passed 非 None 数`（None 不计分母）；`avg_total_score` 全任务均值。
-  - 防污染三规则代码化：来源隔离（`task_source="benchmark"`）/ 答案隔离（reference_answer 只传 evaluator）/ extension 只考不学（无导出经验 API）。
+- 2026-09-29（事务 0007）：Benchmark + test_script 落地决策——`test_script` 客观定论（子进程 + 超时）；`Benchmark` 任务集加载 + 批量汇总；`success_rate` 口径；防污染三规则代码化。
+- 2026-09-29（事务 0008）：演化层 SkillEvolver + Validator 落地决策——
+  - `SkillEvolver.evolve`：Experience[] → 候选 draft（patch 递增、parent_version、change_log 非空、metrics 空）；Evolver 防污染（签名无 reference_answer）。
+  - `Validator.validate`：A/B win_rate（逐任务 1/0.5/0）+ 三支结局（通过→promote+metrics 快照 / 样本不足→draft 转人工 / 不显著·回归→丢弃+failed_evolution）。
+  - A/B 阈值（0.55/20/平局 0.5）集中 config 且设计既定不改；promote 走 `SkillRegistry` 状态机（不绕过）。
 
 ## 当前事务（Current Transaction）
 
-无，0007 已关闭，下一个事务 ID 应为 0008。
+无，0008 已关闭，下一个事务 ID 应为 0009。

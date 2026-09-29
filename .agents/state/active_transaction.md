@@ -5,9 +5,9 @@
 
 ---
 
-事务 ID：`0007`
+事务 ID：`0008`
 
-目标：落地 `Benchmark`（任务集加载 + 批量「执行→评估→汇总」+ 报告）与 `test_script` 客观执行（子进程 + 超时），并把 §11 防污染三规则落实为代码可见的隔离机制；`SkillEvolver` 顺延至 `0008`。
+目标：落地演化层核心 `SkillEvolver`（Experience[] → 候选新版本）+ `Validator`（Benchmark A/B → win_rate 判定 → promote），A/B 阈值（0.5 平局 / 0.55 win_rate / 20 题下限）严格对齐设计 §9/§11，promote 走 `SkillRegistry` 既有状态机。
 
 状态：已关闭
 
@@ -16,11 +16,11 @@
 开始时间：2026-09-29
 
 相关文件：
-- `.agents/transactions/0007/context.md`
-- `.agents/transactions/0007/plan.md`
-- `.agents/transactions/0007/review.md`
-- `.agents/transactions/0007/task.md`
-- `.agents/transactions/0007/execution.md`
-- `.agents/transactions/0007/result.md`
+- `.agents/transactions/0008/context.md`
+- `.agents/transactions/0008/plan.md`
+- `.agents/transactions/0008/review.md`
+- `.agents/transactions/0008/task.md`
+- `.agents/transactions/0008/execution.md`
+- `.agents/transactions/0008/result.md`
 
-备注：本事务已实现并验证通过（全量 104 项测试 PASSED，含既有 92 项无回归），并按 §10 授权完成一次本地提交。承接已关闭的 `0001`–`0006`，补 `Evaluator` 的 `test_script` 客观分支（子进程隔离 + 超时 + 异常兜底），落地 `Benchmark` 作为 `Validator` A/B 的「尺子」；不含 `SkillEvolver`/`Validator`/`EvolutionLoop`/win_rate A/B/真实 LLM 请求。
+备注：本事务已实现并验证通过（全量 115 项测试 PASSED，含既有 104 项无回归），并按 §10 授权完成一次本地提交。承接已关闭的 `0001`–`0007`，串起「经验 → 候选 → 验证 → promote」逆向流闭环；候选为 draft 新版本（不绕过 active 指针/不可变历史）、Evolver 侧防污染（参考答案结构不可达）；不含 `EvolutionLoop`/`cli.py`/`tools.py`/真实 LLM 请求。
