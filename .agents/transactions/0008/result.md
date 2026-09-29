@@ -84,4 +84,4 @@ grep -rn "import sqlite3" evoagent/
 ## 7. 提交
 
 - 提交信息：`0008: 落地演化层 SkillEvolver 与 Validator`
-- 提交哈希：`（提交后回填）`
+- 提交哈希：`6a1c2b563a62082249ce1d650357322a02b86ac8`（`git rev-parse HEAD`，短哈希 `6a1c2b5`）
