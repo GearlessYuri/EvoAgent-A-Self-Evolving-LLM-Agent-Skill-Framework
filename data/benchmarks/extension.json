@@ -1,0 +1,58 @@
+[
+ {
+  "task_id": "ext-00",
+  "task": "把字符串 'word0' 转成大写。只输出转换结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"WORD0\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "ext-01",
+  "task": "把字符串 'abc1' 反转。只输出结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"1cba\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "ext-02",
+  "task": "计算 617 + 716 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"1333\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "ext-03",
+  "task": "计算 14 * 82 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"1148\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ }
+]

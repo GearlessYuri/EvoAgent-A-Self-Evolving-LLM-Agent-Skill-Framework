@@ -1,0 +1,14 @@
+{
+  "prompt_template": "你是一个乐于助人的中文问答助手。请根据用户的问题，给出准确、简洁、有用的回答。如果问题涉及不安全或无法完成的内容，请礼貌说明。任务：{task}",
+  "few_shots": [
+    {
+      "input": "你好，请介绍一下你自己。",
+      "output": "你好！我是一个问答助手，可以帮你解答问题、整理信息、提供建议。请告诉我你想了解什么。"
+    },
+    {
+      "input": "如何用 Python 读取一个文本文件？",
+      "output": "可以使用以下代码：\n\nwith open('文件名.txt', 'r', encoding='utf-8') as f:\n    content = f.read()\nprint(content)\n\n如果文件较大，也可以逐行读取：\n\nwith open('文件名.txt', 'r', encoding='utf-8') as f:\n    for line in f:\n        print(line.strip())"
+    }
+  ],
+  "tools": []
+}

@@ -1,0 +1,282 @@
+[
+ {
+  "task_id": "reg-00",
+  "task": "计算 92 * 25 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"2300\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-01",
+  "task": "把字符串 'word1' 转成大写。只输出转换结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"WORD1\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-02",
+  "task": "把字符串 'abc2' 反转。只输出结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"2cba\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-03",
+  "task": "计算 125 + 859 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"984\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-04",
+  "task": "计算 46 * 42 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"1932\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-05",
+  "task": "把字符串 'word5' 转成大写。只输出转换结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"WORD5\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-06",
+  "task": "把字符串 'abc6' 反转。只输出结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"6cba\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-07",
+  "task": "计算 328 + 242 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"570\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-08",
+  "task": "计算 24 * 97 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"2328\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-09",
+  "task": "把字符串 'word9' 转成大写。只输出转换结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"WORD9\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-10",
+  "task": "把字符串 'abc10' 反转。只输出结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"01cba\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-11",
+  "task": "计算 858 + 658 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"1516\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-12",
+  "task": "计算 22 * 86 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"1892\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-13",
+  "task": "把字符串 'word13' 转成大写。只输出转换结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"WORD13\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-14",
+  "task": "把字符串 'abc14' 反转。只输出结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"41cba\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-15",
+  "task": "计算 532 + 132 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"664\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-16",
+  "task": "计算 14 * 22 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"308\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-17",
+  "task": "把字符串 'word17' 转成大写。只输出转换结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"WORD17\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-18",
+  "task": "把字符串 'abc18' 反转。只输出结果。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"81cba\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "string"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ },
+ {
+  "task_id": "reg-19",
+  "task": "计算 323 + 338 的结果。只输出数字。",
+  "rubric": [],
+  "objective_check": {
+   "type": "test_script",
+   "value": "import sys; sys.exit(0 if \"661\" in sys.stdin.read() else 1)"
+  },
+  "tags": [
+   "arith"
+  ],
+  "difficulty": "easy",
+  "reference_answer": ""
+ }
+]
